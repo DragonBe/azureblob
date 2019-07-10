@@ -25,11 +25,11 @@ steps:
   - script: composer install --no-interaction --prefer-dist
     displayName: 'composer install'
 
-  - script: phpcs
+  - script: vendor/bin/phpcs
     displayName: 'Run PHP Code Sniffer'
 
-  - script: phpunit
+  - script: vendor/bin/phpunit --colors=always --strict-coverage
     displayName: 'Run unit tests with phpunit'
 
-  - script: infection
+  - script: vendor/bin/infection
     displayName: 'Run unit tests with infection'
