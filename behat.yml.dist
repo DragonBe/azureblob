@@ -1,0 +1,18 @@
+# behat.yml
+
+default:
+  autoload:
+    '': "%paths.base%/tests/behat/features/bootstrap"
+  suites:
+    default:
+      paths:    [ "%paths.base%/tests/behat/features" ]
+      contexts: [ "FeatureContext" ]
+    search:
+      paths:    [ "%paths.base%/tests/behat/search/features" ]
+      contexts: [ "SearchContext" ]
+
+build:
+  formatters:
+    progress:
+    junit: [tests/build/logs/behat-junit.xml]
+    html: [tests/build/logs/behat.html]
