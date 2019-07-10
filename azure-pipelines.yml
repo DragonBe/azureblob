@@ -22,7 +22,9 @@ strategy:
       php_version: "7.2"
     php73:
       php_version: "7.3"
-  maxParallel: 3
+    php74:
+      php_version: "7.4"
+  maxParallel: 2
 
 variables:
   phpVersion: $(php_version)
@@ -37,7 +39,7 @@ steps:
       php -version
     displayName: 'Use PHP version $(phpVersion)'
 
-  - script: composer install --no-interaction --prefer-dist
+  - script: composer install --no-interaction --prefer-dist --quiet --no-progress --no-scripts
     displayName: 'composer install'
 
   - script: vendor/bin/phpcs
@@ -52,11 +54,5 @@ steps:
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/*.xml'
-      searchFolder: '$(System.DefaultWorkingDirectory)/build'
-
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: '$(system.defaultWorkingDirectory)'
-      includeRootFolder: false
-  - task: PublishBuildArtifacts@1
+      testResultsFiles: 'junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)/build/logs'
