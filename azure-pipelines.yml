@@ -48,3 +48,15 @@ steps:
 
   - script: vendor/bin/infection
     displayName: 'Run unit tests with infection'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/*.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)/build'
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+      includeRootFolder: false
+  - task: PublishBuildArtifacts@1
