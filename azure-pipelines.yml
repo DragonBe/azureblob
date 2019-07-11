@@ -14,20 +14,8 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
-strategy:
-  matrix:
-    php71:
-      php_version: "7.1"
-    php72:
-      php_version: "7.2"
-    php73:
-      php_version: "7.3"
-    php74:
-      php_version: "7.4"
-  maxParallel: 4
-
 variables:
-  phpVersion: $(php_version)
+  phpVersion: 7.2
 
 steps:
   - script: |
