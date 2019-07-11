@@ -15,6 +15,13 @@ use Zend\Diactoros\Response\JsonResponse;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class HomePageHandlerTest
+ * @package AppTest\Handler
+ *
+ * @uses \App\Handler\HomePageHandler
+ * @covers \App\Handler\HomePageHandler::__construct
+ */
 class HomePageHandlerTest extends TestCase
 {
     /** @var ContainerInterface|ObjectProphecy */
@@ -29,6 +36,9 @@ class HomePageHandlerTest extends TestCase
         $this->router    = $this->prophesize(RouterInterface::class);
     }
 
+    /**
+     * @covers \App\Handler\HomePageHandler::handle
+     */
     public function testReturnsJsonResponseWhenNoTemplateRendererProvided()
     {
         $homePage = new HomePageHandler(
@@ -43,6 +53,9 @@ class HomePageHandlerTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
     }
 
+    /**
+     * @covers \App\Handler\HomePageHandler::handle
+     */
     public function testReturnsHtmlResponseWhenTemplateRendererProvided()
     {
         $renderer = $this->prophesize(TemplateRendererInterface::class);

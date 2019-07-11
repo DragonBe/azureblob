@@ -9,8 +9,17 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\JsonResponse;
 
+/**
+ * Class PingHandlerTest
+ * @package AppTest\Handler
+ *
+ * @uses \App\Handler\PingHandler
+ */
 class PingHandlerTest extends TestCase
 {
+    /**
+     * @covers \App\Handler\PingHandler::handle
+     */
     public function testResponse()
     {
         $pingHandler = new PingHandler();

@@ -24,7 +24,7 @@ strategy:
       php_version: "7.3"
     php74:
       php_version: "7.4"
-  maxParallel: 2
+  maxParallel: 4
 
 variables:
   phpVersion: $(php_version)
@@ -39,6 +39,9 @@ steps:
       php -version
     displayName: 'Use PHP version $(phpVersion)'
 
+  - script: cp phpcs.xml.dist phpcs.xml && cp phpunit.xml.dist phpunit.xml && cp infection.json.dist infection.json && cp behat.yml.dist behat.yml
+    displayName: 'Creating configurations for tools'
+
   - script: composer install --no-interaction --prefer-dist --quiet --no-progress --no-scripts
     displayName: 'composer install'
 
@@ -48,7 +51,7 @@ steps:
   - script: vendor/bin/phpunit --colors=always --strict-coverage
     displayName: 'Run unit tests with phpunit'
 
-  - script: vendor/bin/infection
+  - script: vendor/bin/infection --min-msi=5 --min-covered-msi=70 --threads=4 --no-progress
     displayName: 'Run unit tests with infection'
 
   - task: PublishTestResults@2

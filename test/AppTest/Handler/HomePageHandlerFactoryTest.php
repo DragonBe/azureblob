@@ -12,6 +12,12 @@ use Psr\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class HomePageHandlerFactoryTest
+ * @package AppTest\Handler
+ *
+ * @uses \App\Handler\HomePageHandlerFactory
+ */
 class HomePageHandlerFactoryTest extends TestCase
 {
     /** @var ContainerInterface|ObjectProphecy */
@@ -25,6 +31,10 @@ class HomePageHandlerFactoryTest extends TestCase
         $this->container->get(RouterInterface::class)->willReturn($router);
     }
 
+    /**
+     * @covers \App\Handler\HomePageHandlerFactory::__invoke
+     * @covers \App\Handler\HomePageHandler::__construct
+     */
     public function testFactoryWithoutTemplate()
     {
         $factory = new HomePageHandlerFactory();
@@ -37,6 +47,10 @@ class HomePageHandlerFactoryTest extends TestCase
         $this->assertInstanceOf(HomePageHandler::class, $homePage);
     }
 
+    /**
+     * @covers \App\Handler\HomePageHandlerFactory::__invoke
+     * @covers \App\Handler\HomePageHandler::__construct
+     */
     public function testFactoryWithTemplate()
     {
         $this->container->has(TemplateRendererInterface::class)->willReturn(true);
