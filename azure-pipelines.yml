@@ -59,3 +59,10 @@ steps:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'junit.xml'
       searchFolder: '$(System.DefaultWorkingDirectory)/build/logs'
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+      includeRootFolder: false
+
+  - task: PublishBuildArtifacts@1
