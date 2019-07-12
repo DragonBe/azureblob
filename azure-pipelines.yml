@@ -1,0 +1,56 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+  - master
+  - ab-rewrite-*
+
+pr:
+  - master
+  - ab-rewrite-*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  phpVersion: 7.2
+
+steps:
+  - script: |
+      sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+      sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+      sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+      sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+      sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+      php -version
+    displayName: 'Use PHP version $(phpVersion)'
+
+  - script: cp phpcs.xml.dist phpcs.xml && cp phpunit.xml.dist phpunit.xml && cp infection.json.dist infection.json && cp behat.yml.dist behat.yml
+    displayName: 'Creating configurations for tools'
+
+  - script: composer install --no-interaction --prefer-dist --quiet --no-progress --no-scripts
+    displayName: 'composer install'
+
+  - script: vendor/bin/phpcs
+    displayName: 'Run PHP Code Sniffer'
+
+  - script: vendor/bin/phpunit --colors=always --strict-coverage
+    displayName: 'Run unit tests with phpunit'
+
+  - script: vendor/bin/infection --min-msi=5 --min-covered-msi=70 --threads=4 --no-progress
+    displayName: 'Run unit tests with infection'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit.xml'
+      searchFolder: '$(System.DefaultWorkingDirectory)/build/logs'
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+      includeRootFolder: false
+
+  - task: PublishBuildArtifacts@1
